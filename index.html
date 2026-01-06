@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>LEMÚRIA | Acesso Monitorado</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- A LUZ NAO MENTE. ELA OMITE. -->
+
+  <style>
+    body {
+      background: radial-gradient(circle at top, #111 0%, #050505 60%, #000 100%);
+      color: #e2e2e2;
+      font-family: "Courier New", monospace;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      padding: 25px;
+      border-bottom: 1px solid #2a2a2a;
+      text-align: center;
+    }
+
+    h1 {
+      letter-spacing: 6px;
+      font-size: 22px;
+      margin-bottom: 5px;
+    }
+
+    header p {
+      font-size: 12px;
+      color: #888;
+    }
+
+    main {
+      padding: 30px;
+      max-width: 850px;
+      margin: auto;
+    }
+
+    .warning {
+      border: 1px solid #7a0000;
+      padding: 15px;
+      background: rgba(122,0,0,0.12);
+      margin-bottom: 35px;
+      font-size: 13px;
+    }
+
+    .file {
+      border: 1px solid #2a2a2a;
+      padding: 15px;
+      margin-bottom: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .file:hover {
+      background-color: rgba(255,255,255,0.05);
+    }
+
+    .file::after {
+      content: "";
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #444;
+      font-size: 12px;
+    }
+
+    .locked {
+      color: #777;
+      cursor: not-allowed;
+    }
+
+    .locked::after {
+      content: "SELADO";
+    }
+
+    footer {
+      text-align: center;
+      font-size: 12px;
+      color: #666;
+      margin: 50px 0 25px;
+      min-height: 40px;
+    }
+
+    .flicker {
+      animation: flicker 0.15s infinite alternate;
+    }
+
+    @keyframes flicker {
+      from { opacity: 1; }
+      to { opacity: 0.85; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 class="flicker">LEMÚRIA</h1>
+  <p>REPOSITÓRIO RESTRITO — PROJETO PURGATÓRIO</p>
+</header>
+
+<main>
+  <div class="warning">
+    <strong>AVISO AO OPERADOR:</strong><br>
+    Este terminal não reconhece civis. Se você está lendo isto, o isolamento falhou.
+    <br><br>
+    <em>Nem toda violação é um erro.</em>
+  </div>
+
+  <div class="file" onclick="pedirAcesso('relatorio')">
+    📄 OP-PRG-0001 — Relatório de Incidente
+  </div>
+
+  <div class="file" onclick="pedirAcesso('audio')">
+    🔊 AUDIO_07_CORROMPIDO.wav
+  </div>
+
+  <div class="file locked" data-hint="A marca não aparece na pele">
+    🔒 OP-PRG-0002 — Marcas do Medo
+  </div>
+
+  <div class="file locked" data-hint="Eles sentem antes de entender">
+    🔒 DRK-███ — Arquivo Drakóvia
+  </div>
+
+  <div class="file locked" data-hint="O portão não leva para fora">
+    🔒 LMR-PORTAL — Protocolo Lemúria
+  </div>
+</main>
+
+<footer id="footer-text"></footer>
+
+<script>
+  const footerPhrases = [
+    "Nem toda luz salva.",
+    "Você já esteve aqui antes.",
+    "Algumas portas só se abrem por dentro.",
+    "Lemúria não quer ser encontrada.",
+    "Azaroth não é o fim."
+  ];
+
+  document.getElementById("footer-text").innerText =
+    footerPhrases[Math.floor(Math.random() * footerPhrases.length)];
+
+      if (file === 'AUDIO_07') {
+      alert("Transferência iniciada.\n\nNão escute. Observe.");
+    }
+  
+
+  // Observação silenciosa
+    function pedirAcesso(tipo) {
+    const resposta = prompt("Informe o nome da fundação responsável:");
+
+    if (!resposta) {
+      alert("Nenhuma identificação fornecida.");
+      return;
+    }
+
+    if (resposta.trim() === "H.4.R.D.1") {
+      if (tipo === 'relatorio') {
+        window.open('arquivos/OP-PRG-0001.pdf');
+      }
+      if (tipo === 'audio') {
+        window.open('arquivos/AUDIO_07_CORROMPIDO.wav');
+      }
+    } else {
+      alert("Fundação não reconhecida. O sistema registrou a tentativa.");
+    }
+  }
+
+  console.log("ALGUNS ACESSOS SAO REGISTRADOS.");
+</script>
+
+</body>
+</html>
