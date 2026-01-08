@@ -72,7 +72,6 @@
 
     .locked {
       color: #777;
-      cursor: not-allowed;
     }
 
     .locked::after {
@@ -97,6 +96,7 @@
     }
   </style>
 </head>
+
 <body>
 
 <header>
@@ -120,7 +120,7 @@
     🔊 AUDIO_07_CORROMPIDO.wav
   </div>
 
-  <div class="file locked" data-hint="A marca não aparece na pele">
+  <div class="file locked" onclick="pedirAcesso('marcas')" data-hint="A marca não aparece na pele">
     🔒 OP-PRG-0002 — Marcas do Medo
   </div>
 
@@ -136,7 +136,7 @@
 <footer id="footer-text"></footer>
 
 <script>
-  const footerPhrases = [
+  const frases = [
     "Nem toda luz salva.",
     "Você já esteve aqui antes.",
     "Algumas portas só se abrem por dentro.",
@@ -145,15 +145,9 @@
   ];
 
   document.getElementById("footer-text").innerText =
-    footerPhrases[Math.floor(Math.random() * footerPhrases.length)];
+    frases[Math.floor(Math.random() * frases.length)];
 
-      if (file === 'AUDIO_07') {
-      alert("Transferência iniciada.\n\nNão escute. Observe.");
-    }
-  
-
-  // Observação silenciosa
-    function pedirAcesso(tipo) {
+  function pedirAcesso(tipo) {
     const resposta = prompt("Informe o nome da fundação responsável:");
 
     if (!resposta) {
@@ -161,20 +155,52 @@
       return;
     }
 
-    if (resposta.trim() === "H.4.R.D.1") {
-      if (tipo === 'relatorio') {
-        window.open('arquivos/OP-PRG-0001.pdf');
-      }
-      if (tipo === 'audio') {
-        window.open('arquivos/AUDIO_07_CORROMPIDO.wav');
-      }
-    } else {
-      alert("Fundação não reconhecida. O sistema registrou a tentativa.");
+    if (resposta.trim() !== "H.4.R.D.1") {
+      alert("Fundação não reconhecida.\nA tentativa foi registrada.");
+      return;
+    }
+
+    if (tipo === "relatorio") {
+      localStorage.setItem("leu_relatorio", "true");
+      window.open("arquivos/OP-PRG-0001.pdf");
+    }
+
+    if (tipo === "audio") {
+      localStorage.setItem("ouviu_audio", "true");
+      window.open("arquivos/AUDIO_07_CORROMPIDO.wav");
+    }
+
+    if (tipo === "marcas") {
+      verificarMarcas();
     }
   }
 
-  console.log("ALGUNS ACESSOS SAO REGISTRADOS.");
+  function verificarMarcas() {
+    const leu = localStorage.getItem("leu_relatorio");
+    const ouviu = localStorage.getItem("ouviu_audio");
+
+    if (leu && ouviu) {
+      alert(
+        "REGISTRO INSTÁVEL DETECTADO.\n\n" +
+        "AS MARCAS RESPONDERAM.\n" +
+        "VERSÃO CORROMPIDA DISPONÍVEL."
+      );
+
+      window.open(
+        "arquivos/OP-PRG-0002_MARCAS_DO_MEDO_CORROMPIDO.pdf"
+      );
+    } else {
+      alert(
+        "ACESSO NEGADO.\n\n" +
+        "O PORTÃO NÃO RECONHECE SUA INTENÇÃO."
+      );
+    }
+  }
+
+  console.log("%cALGUNS ACESSOS SÃO REGISTRADOS.", "color:#7a0000");
+  console.log("%cO PORTÃO NÃO RESPONDE À FÉ.", "color:red; font-size:13px;");
 </script>
 
+<!-- OP-PRG-0002_CORROMPIDO EXISTE APENAS APÓS A REUNIÃO -->
 </body>
 </html>
