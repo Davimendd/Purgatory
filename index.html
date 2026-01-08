@@ -14,6 +14,7 @@
       font-family: "Courier New", monospace;
       margin: 0;
       padding: 0;
+      transition: filter 1s ease;
     }
 
     header {
@@ -45,6 +46,7 @@
       background: rgba(122,0,0,0.12);
       margin-bottom: 35px;
       font-size: 13px;
+      transition: all 1s ease;
     }
 
     .file {
@@ -101,11 +103,11 @@
 
 <header>
   <h1 class="flicker">LEMÚRIA</h1>
-  <p>REPOSITÓRIO RESTRITO — PROJETO PURGATÓRIO</p>
+  <p id="subtitulo">REPOSITÓRIO RESTRITO — PROJETO PURGATÓRIO</p>
 </header>
 
 <main>
-  <div class="warning">
+  <div class="warning" id="warning">
     <strong>AVISO AO OPERADOR:</strong><br>
     Este terminal não reconhece civis. Se você está lendo isto, o isolamento falhou.
     <br><br>
@@ -120,15 +122,15 @@
     🔊 AUDIO_07_CORROMPIDO.wav
   </div>
 
-  <div class="file locked" onclick="pedirAcesso('marcas')" data-hint="A marca não aparece na pele">
+  <div class="file locked" onclick="pedirAcesso('marcas')">
     🔒 OP-PRG-0002 — Marcas do Medo
   </div>
 
-  <div class="file locked" data-hint="Eles sentem antes de entender">
+  <div class="file locked">
     🔒 DRK-███ — Arquivo Drakóvia
   </div>
 
-  <div class="file locked" data-hint="O portão não leva para fora">
+  <div class="file locked">
     🔒 LMR-PORTAL — Protocolo Lemúria
   </div>
 </main>
@@ -136,6 +138,9 @@
 <footer id="footer-text"></footer>
 
 <script>
+  /* ======================
+     FRASES DO RODAPÉ
+  ====================== */
   const frases = [
     "Nem toda luz salva.",
     "Você já esteve aqui antes.",
@@ -147,13 +152,13 @@
   document.getElementById("footer-text").innerText =
     frases[Math.floor(Math.random() * frases.length)];
 
+  /* ======================
+     SISTEMA DE ACESSO
+  ====================== */
   function pedirAcesso(tipo) {
     const resposta = prompt("Informe o nome da fundação responsável:");
 
-    if (!resposta) {
-      alert("Nenhuma identificação fornecida.");
-      return;
-    }
+    if (!resposta) return;
 
     if (resposta.trim() !== "H.4.R.D.1") {
       alert("Fundação não reconhecida.\nA tentativa foi registrada.");
@@ -185,17 +190,53 @@
         "AS MARCAS RESPONDERAM.\n" +
         "VERSÃO CORROMPIDA DISPONÍVEL."
       );
-
-      window.open(
-        "arquivos/OP-PRG-0002_MARCAS_DO_MEDO_CORROMPIDO.pdf"
-      );
+      window.open("arquivos/OP-PRG-0002_MARCAS_DO_MEDO_CORROMPIDO.pdf");
     } else {
-      alert(
-        "ACESSO NEGADO.\n\n" +
-        "O PORTÃO NÃO RECONHECE SUA INTENÇÃO."
-      );
+      alert("ACESSO NEGADO.\nO PORTÃO NÃO RECONHECE SUA INTENÇÃO.");
     }
   }
+
+  /* ======================
+     CORRUPÇÃO PELO TEMPO
+  ====================== */
+  let tempoAberto = 0;
+  const warning = document.getElementById("warning");
+  const subtitulo = document.getElementById("subtitulo");
+
+  const corrupcao = setInterval(() => {
+    tempoAberto++;
+
+    // 30s — instabilidade
+    if (tempoAberto === 30) {
+      warning.innerHTML =
+        "<strong>INSTABILIDADE TEMPORAL</strong><br>Permanência detectada.";
+      document.body.style.filter = "contrast(1.1)";
+      console.log("O tempo não está passando corretamente.");
+    }
+
+    // 60s — corrupção
+    if (tempoAberto === 60) {
+      warning.innerHTML =
+        "<strong>REGISTRO CORROMPIDO</strong><br>A linha temporal foi afetada.";
+      document.body.style.filter = "contrast(1.2) saturate(0.8)";
+      subtitulo.innerText = "OBSERVADOR DETECTADO";
+      console.log("O passado observa o presente.");
+    }
+
+    // 90s — evento
+    if (tempoAberto === 90) {
+      warning.innerHTML =
+        "<strong>⚠ PROTOCOLO DE CONTENÇÃO FALHOU</strong><br>O TEMPO FOI VIOLADO.";
+      document.body.style.filter = "invert(1)";
+      alert(
+        "VOCÊ PERMANECEU.\n\n" +
+        "A MORTE REGISTROU.\n" +
+        "O PORTÃO RESPONDEU."
+      );
+      console.log("VOCÊ NÃO DEVERIA TER FICADO.");
+      clearInterval(corrupcao);
+    }
+  }, 1000);
 
   console.log("%cALGUNS ACESSOS SÃO REGISTRADOS.", "color:#7a0000");
   console.log("%cO PORTÃO NÃO RESPONDE À FÉ.", "color:red; font-size:13px;");
