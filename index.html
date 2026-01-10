@@ -1,237 +1,235 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <title>LEMÚRIA | Acesso Monitorado</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<title>LEMÚRIA | Acesso Monitorado</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- A LUZ NAO MENTE. ELA OMITE. -->
-  <!-- MARCAS SEMPRE VÊM EM PARES -->
-  <!-- O TEMPO RESPONDE À MORTE -->
-  <!-- A ENERGIA NÃO É LUZ. É CAOS -->
-  <!-- ALGUNS NOMES JÁ ESTAVAM REGISTRADOS -->
+<!-- A LUZ NAO MENTE. ELA OMITE. -->
 
-  <style>
-    body {
-      background: radial-gradient(circle at top, #111 0%, #050505 60%, #000 100%);
-      color: #e2e2e2;
-      font-family: "Courier New", monospace;
-      margin: 0;
-      padding: 0;
-      transition: filter 5s ease;
-    }
+<style>
+body {
+  background: radial-gradient(circle at top, #111 0%, #050505 60%, #000 100%);
+  color: #e2e2e2;
+  font-family: "Courier New", monospace;
+  margin: 0;
+}
 
-    header {
-      padding: 25px;
-      border-bottom: 1px solid #2a2a2a;
-      text-align: center;
-    }
+header {
+  padding: 25px;
+  border-bottom: 1px solid #2a2a2a;
+  text-align: center;
+}
 
-    h1 {
-      letter-spacing: 6px;
-      font-size: 22px;
-      margin-bottom: 5px;
-      cursor: pointer;
-    }
+h1 {
+  letter-spacing: 6px;
+  font-size: 22px;
+}
 
-    header p {
-      font-size: 12px;
-      color: #888;
-    }
+main {
+  padding: 30px;
+  max-width: 900px;
+  margin: auto;
+}
 
-    main {
-      padding: 30px;
-      max-width: 850px;
-      margin: auto;
-    }
+.warning {
+  border: 1px solid #7a0000;
+  padding: 15px;
+  background: rgba(122,0,0,0.12);
+  margin-bottom: 30px;
+  font-size: 13px;
+}
 
-    .warning {
-      border: 1px solid #7a0000;
-      padding: 15px;
-      background: rgba(122,0,0,0.12);
-      margin-bottom: 35px;
-      font-size: 13px;
-    }
+.file {
+  border: 1px solid #2a2a2a;
+  padding: 15px;
+  margin-bottom: 15px;
+  cursor: pointer;
+}
 
-    .file {
-      border: 1px solid #2a2a2a;
-      padding: 15px;
-      margin-bottom: 15px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
+.file:hover {
+  background: rgba(255,255,255,0.05);
+}
 
-    .file:hover {
-      background-color: rgba(255,255,255,0.05);
-    }
+footer {
+  text-align: center;
+  font-size: 12px;
+  color: #666;
+  margin: 40px 0 20px;
+  min-height: 40px;
+  opacity: 0;
+  transition: opacity 1.5s ease;
+}
 
-    footer {
-      text-align: center;
-      font-size: 12px;
-      color: #666;
-      margin: 50px 0 10px;
-    }
+.footer-ativo {
+  opacity: 1;
+  text-shadow: 0 0 8px rgba(180,0,0,0.6);
+}
 
-    #logs {
-      max-width:850px;
-      margin:20px auto 40px;
-      padding-top:15px;
-      border-top:1px solid #2a2a2a;
-      font-size:11px;
-      color:#666;
-      opacity:0.85;
-    }
-
-    .flicker {
-      animation: flicker 0.15s infinite alternate;
-    }
-
-    @keyframes flicker {
-      from { opacity: 1; }
-      to { opacity: 0.85; }
-    }
-  </style>
+.footer-glitch {
+  text-shadow: 2px 0 red, -2px 0 cyan;
+}
+</style>
 </head>
 
 <body>
 
 <header>
-  <h1 class="flicker" title="O PORTÃO JÁ FOI ABERTO UMA VEZ">LEMÚRIA</h1>
+  <h1>LEMÚRIA</h1>
   <p>REPOSITÓRIO RESTRITO — PROJETO PURGATÓRIO</p>
 </header>
 
 <main>
-  <div class="warning">
-    <strong>AVISO AO OPERADOR:</strong><br>
-    Este terminal não reconhece civis. Se você está lendo isto, o isolamento falhou.
-    <br><br>
-    <em>Nem toda violação é um erro.</em>
-  </div>
+<div class="warning">
+<strong>AVISO AO OPERADOR:</strong><br>
+Este terminal não reconhece civis.<br>
+<em>Nem toda violação é um erro.</em>
+</div>
 
-  <div class="file" onclick="abrirArquivo('OP-PRG-0001.pdf')">
-    📄 OP-PRG-0001 — Relatório de Incidente
-  </div>
+<div class="file" onclick="acessar('relatorio')">📄 OP-PRG-0001 — Relatório de Incidente</div>
+<div class="file" onclick="acessar('marcas')">📄 OP-PRG-0002 — Marcas do Medo</div>
+<div class="file" onclick="acessar('audio')">🔊 AUDIO_07_CORROMPIDO.wav</div>
 
-  <div class="file" onclick="abrirArquivo('AUDIO_07_CORROMPIDO.wav')">
-    🔊 AUDIO_07_CORROMPIDO.wav
-  </div>
+<hr>
 
-  <div class="file" onclick="abrirArquivo('OP-PRG-0002_MARCAS_DO_MEDO.pdf')">
-    📄 OP-PRG-0002 — Marcas do Medo
-  </div>
-
-  <div class="file">🔒 DRK-███ — Arquivo Drakóvia</div>
-  <div class="file">🔒 LMR-PORTAL — Protocolo Lemúria</div>
+<div id="logs"></div>
 </main>
 
 <footer id="footer-text"></footer>
 
-<div id="logs">
-  <strong>REGISTROS RECENTES:</strong>
-  <div id="log-content"></div>
-</div>
-
-<!-- TEXTO INVISÍVEL -->
-<span style="position:absolute;bottom:10px;left:10px;font-size:10px;color:#050505;user-select:text;">
-  AS RELÍQUIAS NÃO ABREM O PORTÃO. ELAS ACORDAM ALGO.
-</span>
-
 <script>
-  const frases = [
-    "Nem toda luz salva.",
-    "Você já esteve aqui antes.",
-    "O tempo não corre aqui.",
-    "As marcas escolhem.",
-    "Azaroth não é o fim.",
-    "O portão reage à reunião.",
-    "A Energia não obedece.",
-    "A Morte observa."
-  ];
+/* ===== CONFIGURAÇÃO DO JOGADOR ===== */
+const jogadorMarcado = "Belo";
 
-  document.getElementById("footer-text").innerText =
-    frases[Math.floor(Math.random() * frases.length)];
+/* ===== JOGADORES E ENTIDADES ===== */
+const marcados = {
+  Belo: { entidade: "Azaroth", personagens: ["Olover Schäfer", "Klaus Mori"] },
+  Maju: { entidade: "Luz", personagens: ["Arthur Hall", "Bertrand Durant"] },
+  Kate: { entidade: "Azaroth", personagens: ["Roxanna Agriche"] },
+  Lukas: { entidade: "Luz", personagens: ["Steven Walker"] },
+  Clay: { entidade: "Azaroth", personagens: ["Emma Munroe"] },
+  Lia: { entidade: "Luz", personagens: ["Sue Myeni"] },
+  Caio: { entidade: "Azaroth", personagens: ["Eros Schäfer"] },
+  Karen: { entidade: "Interferencia", personagens: ["Alice Miller"] }
+};
 
-  function abrirArquivo(nome) {
-    window.open("arquivos/" + nome, "_blank");
+/* ===== ACESSO AOS ARQUIVOS ===== */
+function acessar(tipo) {
+  const senha = prompt("Informe o nome da fundação responsável:");
+  if (senha !== "H.4.R.D.1") {
+    alert("Fundação não reconhecida.");
+    return;
   }
+  if (tipo === "relatorio") window.open("arquivos/OP-PRG-0001.pdf");
+  if (tipo === "marcas") window.open("arquivos/OP-PRG-0002_MARCAS_DO_MEDO_CORROMPIDO.pdf");
+  if (tipo === "audio") window.open("arquivos/AUDIO_07_CORROMPIDO.wav");
+}
 
-  /* ===== LOGS FALSOS ===== */
+/* ===== LOGS DINÂMICOS POR DIA ===== */
+const frasesLogs = {
+  Azaroth: [
+    "{nome} não deveria resistir.",
+    "O caos observa {nome}.",
+    "O sangue reconhece {nome}."
+  ],
+  Luz: [
+    "{nome}, ainda há escolha.",
+    "A luz espera por você, {nome}.",
+    "{nome} não está sozinho."
+  ],
+  Interferencia: [
+    "{nome} não pertence a nenhum lado.",
+    "Eles mentem para {nome}.",
+    "{nome} sente a falha."
+  ]
+};
 
-  const logsFalsos = [
-    "[00:14:03] ACESSO REGISTRADO — OP-PRG-0001",
-    "[01:02:10] ALERTA: PADRÃO NÃO HUMANO",
-    "[03:11:29] MARCAS DO MEDO — ATIVAÇÃO PASSIVA",
-    "[04:00:00] SINCRONIA TEMPORAL AJUSTADA",
-    "[07:07:07] EVENTO RECORRENTE",
-    "[08:19:31] O PORTÃO RESPONDEU",
-    "[10:10:10] AZAROTH — REFERÊNCIA"
-  ];
+function gerarLogs() {
+  const area = document.getElementById("logs");
+  const hoje = new Date().toDateString();
+  let seed = hoje.length;
 
-  const logContainer = document.getElementById("log-content");
+  const dados = marcados[jogadorMarcado];
+  const entidade = dados.entidade;
+  const frases = frasesLogs[entidade];
 
-  function adicionarLogBase() {
-    const log = logsFalsos[Math.floor(Math.random() * logsFalsos.length)];
-    const div = document.createElement("div");
-    div.textContent = log;
-    logContainer.prepend(div);
-    if (logContainer.children.length > 7)
-      logContainer.lastChild.remove();
+  let log = `<strong>LOGS DE ACESSO — ${hoje}</strong><br><br>`;
+  for (let i = 0; i < 3; i++) {
+    const frase = frases[(seed + i) % frases.length]
+      .replace("{nome}", jogadorMarcado);
+    log += `• ${frase}<br>`;
   }
+  area.innerHTML = log;
+}
+gerarLogs();
 
-  setInterval(adicionarLogBase, Math.random() * 7000 + 6000);
+/* ===== FOOTER VIVO ===== */
+const footer = document.getElementById("footer-text");
 
-  /* ===== MARCADOS ===== */
+const frasesFooter = {
+  Azaroth: [
+    "Você sente isso, {nome}.",
+    "Não lute, {nome}.",
+    "O caos já te conhece."
+  ],
+  Luz: [
+    "{nome}, respire.",
+    "Ainda há escolha.",
+    "Não é tarde."
+  ],
+  Interferencia: [
+    "{nome}… escolha logo.",
+    "Eles mentem.",
+    "Você sabe."
+  ]
+};
 
-  const marcados = [
-    { jogador:"Belo", marcas:["Klaus Mori","Olover Schäfer"] },
-    { jogador:"Maju", marcas:["Bertrand Durant","Arthur Hall"] },
-    { jogador:"Kate", marcas:["Lauren Bellacian","Roxanna Agriche"] },
-    { jogador:"Lukas", marcas:["Darius Gwenord","Steven Walker"] },
-    { jogador:"Clay", marcas:["Wally Evans","Emma Munroe"] },
-    { jogador:"Lia", marcas:["Avani Salvatore","Sue Myeni"] },
-    { jogador:"Caio", marcas:["Hans Eriksson","Eros Schäfer"] },
-    { jogador:"Karen", marcas:["Evelyn Miller","Alice Miller"] }
-  ];
+function atualizarFooter() {
+  const entidade = marcados[jogadorMarcado]?.entidade || "Interferencia";
+  let grupo = frasesFooter[entidade];
 
-  function gerarLogMarcado() {
-    const m = marcados[Math.floor(Math.random()*marcados.length)];
-    const log = `[██:██:██] MARCA ATIVA — ${m.jogador}`;
-    const detalhe = `↳ ASSOCIAÇÕES: ${m.marcas[0]} / ${m.marcas[1]}`;
+  if (Math.random() < 0.2) grupo = frasesFooter.Interferencia;
 
-    const div = document.createElement("div");
-    div.textContent = log;
-    logContainer.prepend(div);
+  const frase = grupo[Math.floor(Math.random() * grupo.length)]
+    .replace("{nome}", jogadorMarcado);
 
-    console.log("%c"+log+"\n%c"+detalhe,"color:#7a0000;","color:#888;");
+  footer.textContent = frase;
+  footer.classList.add("footer-ativo");
+
+  if (Math.random() < 0.3) {
+    footer.classList.add("footer-glitch");
+    setTimeout(() => footer.classList.remove("footer-glitch"), 300);
   }
+}
 
-  setInterval(() => {
-    if (Math.random() < 0.25) gerarLogMarcado();
-  }, 12000);
+/* ===== DETECTA ATENÇÃO ===== */
+let olhando = true;
+let timeout;
 
-  /* ===== COMPORTAMENTO TEMPORAL ===== */
+document.addEventListener("visibilitychange", () => {
+  olhando = !document.hidden;
+  if (!olhando) footer.classList.remove("footer-ativo");
+  else atualizarFooter();
+});
 
-  let intensidade = 0;
-  setInterval(() => {
-    intensidade += 0.002;
-    document.body.style.filter = `contrast(${1+intensidade})`;
-  }, 10000);
+document.addEventListener("mousemove", () => {
+  olhando = true;
+  atualizarFooter();
+  clearTimeout(timeout);
+  timeout = setTimeout(() => {
+    olhando = false;
+    footer.classList.remove("footer-ativo");
+  }, 8000);
+});
 
-  setTimeout(() => {
-    console.log("%c[PROTOCOLO INTERNO]\nOBSERVADOR CLASSIFICADO COMO ATIVO",
-      "color:red;font-size:13px;");
-  }, 300000);
+setTimeout(atualizarFooter, 2000);
+setInterval(() => {
+  if (olhando) atualizarFooter();
+}, 180000);
 
-  let cliques = 0;
-  document.querySelector("h1").addEventListener("click",()=>{
-    cliques++;
-    if(cliques===7){
-      alert("AS MARCAS RESPONDERAM.");
-      console.log("RELÍQUIAS NECESSÁRIAS: 10");
-    }
-  });
-
-  console.log("VOCÊ NÃO FOI ESCOLHIDO. FOI NOTADO.");
+/* ===== OBSERVAÇÃO ===== */
+console.log("ALGUNS ACESSOS SÃO REGISTRADOS.");
+console.log("LEMÚRIA OBSERVA.");
 </script>
 
 </body>
