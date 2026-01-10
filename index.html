@@ -6,10 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- A LUZ NAO MENTE. ELA OMITE. -->
-  <!-- ALGUNS DOCUMENTOS FORAM REMOVIDOS ANTES DE EXISTIREM -->
+  <!-- MARCAS SEMPRE VÊM EM PARES -->
   <!-- O TEMPO RESPONDE À MORTE -->
-  <!-- A ENERGIA NÃO É LUZ. É CAOS EM MOVIMENTO -->
-  <!-- OP-PRG-0010 NÃO DEVERIA ESTAR AQUI -->
+  <!-- A ENERGIA NÃO É LUZ. É CAOS -->
+  <!-- ALGUNS NOMES JÁ ESTAVAM REGISTRADOS -->
 
   <style>
     body {
@@ -69,8 +69,17 @@
       text-align: center;
       font-size: 12px;
       color: #666;
-      margin: 50px 0 25px;
-      min-height: 40px;
+      margin: 50px 0 10px;
+    }
+
+    #logs {
+      max-width:850px;
+      margin:20px auto 40px;
+      padding-top:15px;
+      border-top:1px solid #2a2a2a;
+      font-size:11px;
+      color:#666;
+      opacity:0.85;
     }
 
     .flicker {
@@ -107,30 +116,23 @@
     🔊 AUDIO_07_CORROMPIDO.wav
   </div>
 
-  <div class="file" onclick="abrirArquivo('OP-PRG-0002_MARCAS_DO_MEDO_CORROMPIDO.pdf')">
+  <div class="file" onclick="abrirArquivo('OP-PRG-0002_MARCAS_DO_MEDO.pdf')">
     📄 OP-PRG-0002 — Marcas do Medo
   </div>
 
-  <div class="file">
-    🔒 DRK-███ — Arquivo Drakóvia
-  </div>
-
-  <div class="file">
-    🔒 LMR-PORTAL — Protocolo Lemúria
-  </div>
+  <div class="file">🔒 DRK-███ — Arquivo Drakóvia</div>
+  <div class="file">🔒 LMR-PORTAL — Protocolo Lemúria</div>
 </main>
 
 <footer id="footer-text"></footer>
 
+<div id="logs">
+  <strong>REGISTROS RECENTES:</strong>
+  <div id="log-content"></div>
+</div>
+
 <!-- TEXTO INVISÍVEL -->
-<span style="
-  position:absolute;
-  bottom:10px;
-  left:10px;
-  font-size:10px;
-  color:#050505;
-  user-select:text;
-">
+<span style="position:absolute;bottom:10px;left:10px;font-size:10px;color:#050505;user-select:text;">
   AS RELÍQUIAS NÃO ABREM O PORTÃO. ELAS ACORDAM ALGO.
 </span>
 
@@ -138,14 +140,12 @@
   const frases = [
     "Nem toda luz salva.",
     "Você já esteve aqui antes.",
-    "Algumas portas só se abrem por dentro.",
-    "Lemúria não quer ser encontrada.",
-    "Azaroth não é o fim.",
     "O tempo não corre aqui.",
-    "A Energia não obedece.",
-    "A Morte observa em silêncio.",
     "As marcas escolhem.",
-    "O portão reage à reunião."
+    "Azaroth não é o fim.",
+    "O portão reage à reunião.",
+    "A Energia não obedece.",
+    "A Morte observa."
   ];
 
   document.getElementById("footer-text").innerText =
@@ -155,39 +155,83 @@
     window.open("arquivos/" + nome, "_blank");
   }
 
-  // Console oculto
-  console.log("%cVOCÊ NÃO FOI ESCOLHIDO. FOI NOTADO.", "color:#7a0000;");
-  console.log("%cO PURGATÓRIO NÃO É UM LUGAR.", "color:#666;");
-  console.log("%cLEMÚRIA EXISTE ENTRE UM SEGUNDO E OUTRO.", "color:#888;");
-  console.log("%cAZAROTH NÃO DORME.", "color:#7a0000;");
+  /* ===== LOGS FALSOS ===== */
 
-  // Respiração da página (tempo aberto)
+  const logsFalsos = [
+    "[00:14:03] ACESSO REGISTRADO — OP-PRG-0001",
+    "[01:02:10] ALERTA: PADRÃO NÃO HUMANO",
+    "[03:11:29] MARCAS DO MEDO — ATIVAÇÃO PASSIVA",
+    "[04:00:00] SINCRONIA TEMPORAL AJUSTADA",
+    "[07:07:07] EVENTO RECORRENTE",
+    "[08:19:31] O PORTÃO RESPONDEU",
+    "[10:10:10] AZAROTH — REFERÊNCIA"
+  ];
+
+  const logContainer = document.getElementById("log-content");
+
+  function adicionarLogBase() {
+    const log = logsFalsos[Math.floor(Math.random() * logsFalsos.length)];
+    const div = document.createElement("div");
+    div.textContent = log;
+    logContainer.prepend(div);
+    if (logContainer.children.length > 7)
+      logContainer.lastChild.remove();
+  }
+
+  setInterval(adicionarLogBase, Math.random() * 7000 + 6000);
+
+  /* ===== MARCADOS ===== */
+
+  const marcados = [
+    { jogador:"Belo", marcas:["Klaus Mori","Olover Schäfer"] },
+    { jogador:"Maju", marcas:["Bertrand Durant","Arthur Hall"] },
+    { jogador:"Kate", marcas:["Lauren Bellacian","Roxanna Agriche"] },
+    { jogador:"Lukas", marcas:["Darius Gwenord","Steven Walker"] },
+    { jogador:"Clay", marcas:["Wally Evans","Emma Munroe"] },
+    { jogador:"Lia", marcas:["Avani Salvatore","Sue Myeni"] },
+    { jogador:"Caio", marcas:["Hans Eriksson","Eros Schäfer"] },
+    { jogador:"Karen", marcas:["Evelyn Miller","Alice Miller"] }
+  ];
+
+  function gerarLogMarcado() {
+    const m = marcados[Math.floor(Math.random()*marcados.length)];
+    const log = `[██:██:██] MARCA ATIVA — ${m.jogador}`;
+    const detalhe = `↳ ASSOCIAÇÕES: ${m.marcas[0]} / ${m.marcas[1]}`;
+
+    const div = document.createElement("div");
+    div.textContent = log;
+    logContainer.prepend(div);
+
+    console.log("%c"+log+"\n%c"+detalhe,"color:#7a0000;","color:#888;");
+  }
+
+  setInterval(() => {
+    if (Math.random() < 0.25) gerarLogMarcado();
+  }, 12000);
+
+  /* ===== COMPORTAMENTO TEMPORAL ===== */
+
   let intensidade = 0;
   setInterval(() => {
     intensidade += 0.002;
-    document.body.style.filter = `contrast(${1 + intensidade})`;
+    document.body.style.filter = `contrast(${1+intensidade})`;
   }, 10000);
 
-  // Mensagem após permanência longa
   setTimeout(() => {
-    document.querySelector(".warning").innerHTML +=
-      "<br><br><em>O sistema reconheceu sua permanência.</em>";
-  }, 180000);
+    console.log("%c[PROTOCOLO INTERNO]\nOBSERVADOR CLASSIFICADO COMO ATIVO",
+      "color:red;font-size:13px;");
+  }, 300000);
 
-  // Sequência secreta de cliques
   let cliques = 0;
-  document.querySelector("h1").addEventListener("click", () => {
+  document.querySelector("h1").addEventListener("click",()=>{
     cliques++;
-    if (cliques === 7) {
+    if(cliques===7){
       alert("AS MARCAS RESPONDERAM.");
       console.log("RELÍQUIAS NECESSÁRIAS: 10");
     }
   });
 
-  // Cursor instável ocasional
-  if (Math.random() < 0.05) {
-    document.body.style.cursor = "crosshair";
-  }
+  console.log("VOCÊ NÃO FOI ESCOLHIDO. FOI NOTADO.");
 </script>
 
 </body>
