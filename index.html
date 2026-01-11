@@ -2,261 +2,244 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>TERMINAL DA FUNDAÇÃO</title>
+<title>LEMÚRIA — TERMINAL</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-/* ===== RESET ===== */
-* {
-  box-sizing: border-box;
+body{
+  background:#020402;
+  color:#7CFF7C;
+  font-family:"Courier New", monospace;
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-shadow:0 0 6px rgba(124,255,124,.4);
 }
 
-/* ===== FUNDO CRT ===== */
-body {
-  background: radial-gradient(ellipse at center, #0a120a 0%, #020402 70%);
-  color: #7CFF7C;
-  font-family: "Courier New", monospace;
-  margin: 0;
-  height: 100vh;
-  overflow: hidden;
-}
-
-/* ===== SCANLINES ===== */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(0,0,0,0.15),
-    rgba(0,0,0,0.15) 1px,
-    transparent 1px,
-    transparent 3px
-  );
-  pointer-events: none;
-}
-
-/* ===== VINHETA ===== */
-body::after {
+body::before{
   content:"";
   position:fixed;
   inset:0;
-  box-shadow: inset 0 0 120px rgba(0,0,0,0.9);
+  background:repeating-linear-gradient(
+    to bottom,
+    rgba(0,0,0,.15),
+    rgba(0,0,0,.15) 1px,
+    transparent 1px,
+    transparent 3px
+  );
   pointer-events:none;
 }
 
-/* ===== TERMINAL ===== */
-#terminal, #login {
-  padding: 25px;
-  height: 100%;
-  overflow-y: auto;
-  text-shadow: 0 0 6px rgba(124,255,124,0.4);
+#terminal{
+  width:1000px;
+  max-width:95%;
+  height:600px;
+  background:#000;
+  border:2px solid #1e5f1e;
+  display:grid;
+  grid-template-columns: 2fr 1fr;
 }
 
-/* ===== INPUT ===== */
-input, button {
-  background: black;
-  border: 1px solid #3aff3a;
-  color: #7CFF7C;
-  padding: 6px;
-  font-family: inherit;
-  margin-top: 6px;
+.hidden{display:none;}
+
+#main{padding:20px;}
+#logs{
+  border-left:1px solid #1e5f1e;
+  padding:15px;
+  font-size:12px;
+  overflow-y:auto;
+  background:#010301;
 }
 
-button:hover {
-  background: #041a04;
-  cursor: pointer;
+.log{margin-bottom:10px;opacity:.9;}
+.log.az{color:#ff6a6a;}
+.log.lz{color:#6acbff;}
+.log.sys{color:#7CFF7C;}
+.log.hk{
+  color:#e6ff00;
+  text-shadow:0 0 8px rgba(255,255,0,.6);
 }
 
-/* ===== LOGS ===== */
-.log {
-  margin: 4px 0;
-  font-size: 13px;
+h1{text-align:center;letter-spacing:4px;}
+.sub{text-align:center;font-size:11px;color:#6fae6f;margin-bottom:20px;}
+
+input,button{
+  background:#000;
+  border:1px solid #3aff3a;
+  color:#7CFF7C;
+  padding:8px;
+  font-family:inherit;
 }
 
-.log-entidade {
-  color: #ff6a6a;
-  text-shadow: 0 0 6px rgba(255,0,0,0.5);
-}
+button{cursor:pointer;}
+button:hover{background:#062206;}
 
-.log-luz {
-  color: #7cb7ff;
+.opcao{
+  border:1px solid #1e5f1e;
+  padding:10px;
+  margin-bottom:8px;
+  cursor:pointer;
 }
+.opcao:hover{background:rgba(124,255,124,.08);}
+.bloqueado{color:#777;border-color:#333;}
+.bloqueado::after{content:" [SELADO]";color:#7a0000;}
 
-.log-cruzado {
-  color: #b6ffb6;
-  font-style: italic;
+#footer{
+  margin-top:20px;
+  font-size:12px;
+  opacity:0;
+  transition:opacity 1s;
 }
-
-/* ===== LINKS ===== */
-a {
-  color: #ff6a6a;
-  text-decoration: none;
+.footer-ativo{
+  opacity:1;
+  text-shadow:0 0 10px rgba(255,0,0,.6);
 }
-a:hover {
-  text-decoration: underline;
-}
-
-/* ===== FOOTER ===== */
-#footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  padding: 6px;
-  background: rgba(0,0,0,0.8);
-  border-top: 1px solid #144214;
-  text-align: center;
-  font-size: 12px;
-  opacity: 0;
-  transition: opacity 0.4s;
-}
-
-.footer-ativo { opacity: 1; }
-.footer-glitch {
-  animation: glitch 0.15s infinite alternate;
-}
-
-@keyframes glitch {
-  from { text-shadow: 2px 0 red; }
-  to { text-shadow: -2px 0 cyan; }
-}
-
-/* ===== CURSOR PISCANDO ===== */
-.cursor::after {
-  content: "█";
-  animation: blink 1s infinite;
-}
-
-@keyframes blink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
-}
-
-.hidden { display:none; }
 </style>
 </head>
 
 <body>
+<div id="terminal">
+
+<div id="main">
 
 <div id="login">
-  <pre>
-FUNDAÇÃO — TERMINAL RESTRITO
-SISTEMA: PURGATÓRIO
-STATUS: MONITORANDO
-  </pre>
-  <p class="cursor">IDENTIFICAÇÃO</p>
-  <input id="nomeJogador" placeholder="Digite seu nome">
-  <br>
-  <button onclick="login()">CONFIRMAR</button>
-  <p id="mensagem-retorno"></p>
+<h1>LEMÚRIA</h1>
+<div class="sub">TERMINAL RESTRITO — PROJETO PURGATÓRIO</div>
+<p>IDENTIFICAÇÃO:</p>
+<input id="nome">
+<button onclick="login()">CONFIRMAR</button>
+<p id="erro" style="color:#ff6a6a;font-size:12px;"></p>
 </div>
 
-<div id="terminal" class="hidden">
-  <pre>
-== REGISTROS DE ACESSO ==
-  </pre>
-  <div id="logs"></div>
+<div id="sistema" class="hidden">
+<h1>LEMÚRIA</h1>
+<div class="sub">ACESSO CONCEDIDO</div>
 
-  <pre>
-== ARQUIVOS BLOQUEADOS ==
-  </pre>
-  <div id="arquivos"></div>
-</div>
+<div class="opcao" onclick="abrir('audio')">🔊 AUDIO_07_CORROMPIDO</div>
+<div class="opcao" onclick="abrir('op1')">📄 OP-PRG-0001</div>
+<div class="opcao" onclick="abrir('op2')">📄 OP-PRG-0002</div>
+
+<div class="opcao bloqueado" onclick="senha('drk')">🔒 Investigativo Drakóvia</div>
+<div class="opcao bloqueado" onclick="senha('ano')">🔒 Anotações Manuscritas</div>
 
 <div id="footer"></div>
+</div>
+</div>
+
+<div id="logs"></div>
+</div>
 
 <script>
-/* ===== DADOS ===== */
-const jogadores = {
-  Clay:"Azaroth", Kate:"Azaroth", Belo:"Azaroth",
-  Lukas:"Luz", Maju:"Luz", Lia:"Luz", Caio:"Azaroth"
+const jogadores={
+  Clay:"Azaroth",Kate:"Azaroth",Belo:"Azaroth",Caio:"Azaroth",
+  Maju:"Luz",Lia:"Luz",Lukas:"Luz"
 };
 
-const senhas = {
-  Clay:["DRK-OBSIDIA","HIDRA-7"],
-  Kate:["TENEBRIA","ECO-MEDO"],
-  Belo:["NEVOA-VIVA","OLHO-QUE-LE"],
-  Lukas:["LUX-PRIME","CRONO-MORTE"],
-  Maju:["SELO-LUZ","PASSADO-FUTURO"],
-  Lia:["ORDEM","HARMONIA"],
-  Caio:["AZAR-ETERNO","VOZES-DO-MAR"]
+const pistas={
+  Clay:["TENEBRIA não é pedra.","O medo molda a memória."],
+  Kate:["VERDADE não se escreve inteira.","Drakóvia observa."],
+  Belo:["O nome vem do minério.","Não é plural."],
+  Maju:["VOZES não falam sozinhas.","Escute a névoa."],
+  Lia:["A NEVOA conduz.","Nada ecoa."],
+  Lukas:["NA separa.","O hífen importa."],
+  Caio:["A senha confirma.","Não abre portas."]
 };
 
-const frases = {
-  Azaroth:[
-    "O medo ensina.",
-    "Você voltou.",
-    "Drakóvia observa."
-  ],
-  Luz:[
-    "Ainda há escolha.",
-    "Não confie no caos.",
-    "O tempo cobra."
-  ]
+const falasEntidades={
+  Azaroth:["Eles mentem.","Aceite o caos.","A Luz falha."],
+  Luz:["Resista.","Ainda há tempo.","Não confie nele."]
 };
 
-let jogador = sessionStorage.getItem("jogador");
-const jaEntrouAntes = localStorage.getItem("jaEntrouAntes");
+const falasHacker=[
+  "vocês estão juntando errado",
+  "não é uma frase, é uma junção",
+  "TENEBRIA + VERDADE",
+  "VOZES atravessam a NEVOA",
+  "o hífen NÃO é decorativo",
+  "cada um viu um pedaço",
+  "a fundação não quer que vocês saibam"
+];
 
-/* ===== LOGIN ===== */
-function login() {
-  const nome = nomeJogador.value.trim();
-  if (!jogadores[nome]) return alert("ACESSO NEGADO");
-  jogador = nome;
-  sessionStorage.setItem("jogador", nome);
-  localStorage.setItem("jaEntrouAntes","1");
-  iniciar();
-}
+let jogador=null;
+let logsPausados=false;
 
-/* ===== INICIAR ===== */
-function iniciar() {
-  loginDiv.hidden = true;
-  terminal.hidden = false;
-  gerarLogs();
-  gerarArquivos();
+function login(){
+  const nome=document.getElementById("nome").value.trim();
+  if(!jogadores[nome]){
+    document.getElementById("erro").textContent="IDENTIDADE NÃO RECONHECIDA.";
+    return;
+  }
+  jogador=nome;
+  document.getElementById("login").classList.add("hidden");
+  document.getElementById("sistema").classList.remove("hidden");
+  iniciarLogs();
   atualizarFooter();
 }
 
-/* ===== LOGS ===== */
-function gerarLogs() {
-  logs.innerHTML = "";
-  const entidade = jogadores[jogador];
-
-  logs.innerHTML += `<div class="log">Acesso confirmado: ${jogador}</div>`;
-  if (jaEntrouAntes)
-    logs.innerHTML += `<div class="log log-cruzado">Sessão anterior interrompida.</div>`;
-
-  logs.innerHTML += `<div class="log log-entidade">${entidade}: ${frases[entidade][Math.floor(Math.random()*3)]}</div>`;
+function abrir(t){
+  if(t==="audio")window.open("arquivos/AUDIO_07_CORROMPIDO.wav");
+  if(t==="op1")window.open("arquivos/OP-PRG-0001.pdf");
+  if(t==="op2")window.open("arquivos/OP-PRG-0002_MARCAS_DO_MEDO_CORROMPIDO.pdf");
 }
 
-/* ===== ARQUIVOS ===== */
-function gerarArquivos() {
-  arquivos.innerHTML = `
-  OP-DRK-0001<br>
-  <input placeholder="Senha" oninput="verificar(this,0)"><br><br>
-  OP-DRK-ANOTAÇÕES<br>
-  <input placeholder="Senha" oninput="verificar(this,1)">
-  `;
+function senha(t){
+  const s=prompt("INSIRA A SENHA:");
+  if(t==="drk" && s==="TENEBRIA-VERDADE")
+    window.open("arquivos/OP-DRK-INVESTIGATIVO_DRAKOVIA.pdf");
+  else if(t==="ano" && s==="VOZES-NA-NEVOA")
+    window.open("arquivos/OP-DRK-ANOTACOES_MANUSCRITAS_AGENTE.pdf");
+  else alert("SENHA INCORRETA.");
 }
 
-function verificar(el,i) {
-  if (el.value === senhas[jogador][i]) {
-    el.outerHTML = `<a href="${i===0?'OP-DRK-INVESTIGATIVO_DRAKOVIA.pdf':'OP-DRK-ANOTACOES_MANUSCRITAS_AGENTE.pdf'}" target="_blank">ACESSAR</a>`;
-  }
+function iniciarLogs(){
+  const area=document.getElementById("logs");
+  area.innerHTML="<strong>LOGS ATIVOS</strong><br><br>";
+  let i=0;
+
+  setInterval(()=>{
+    if(logsPausados||!jogador)return;
+    const msg=pistas[jogador][i%pistas[jogador].length];
+    const classe=jogadores[jogador]==="Azaroth"?"az":"lz";
+    area.innerHTML+=`<div class="log ${classe}">[${new Date().toLocaleTimeString()}] ${msg}</div>`;
+    area.scrollTop=area.scrollHeight;
+    i++;
+  },4000);
 }
 
-/* ===== FOOTER ===== */
-function atualizarFooter() {
-  footer.textContent = `${jogadores[jogador]} chama por ${jogador}`;
-  footer.classList.add("footer-ativo");
-  if (Math.random()<0.3) footer.classList.add("footer-glitch");
-  setTimeout(()=>footer.classList.remove("footer-glitch"),300);
+function interferencia(){
+  if(logsPausados)return;
+  logsPausados=true;
+  const entidade=Math.random()<0.5?"Azaroth":"Luz";
+  const area=document.getElementById("logs");
+  area.innerHTML+=`<div class="log ${entidade==="Azaroth"?"az":"lz"}"><strong>[INTERFERÊNCIA]</strong> ${falasEntidades[entidade][Math.floor(Math.random()*3)]}</div>`;
+  area.scrollTop=area.scrollHeight;
+  setTimeout(()=>logsPausados=false,6000);
 }
 
-/* ===== LIMPAR SESSÃO ===== */
-window.addEventListener("beforeunload",()=>sessionStorage.clear());
+function hacker(){
+  if(logsPausados)return;
+  logsPausados=true;
+  const area=document.getElementById("logs");
+  area.innerHTML+=`<div class="log hk"><strong>[INTRUSÃO EXTERNA]</strong> ${falasHacker[Math.floor(Math.random()*falasHacker.length)]}</div>`;
+  area.scrollTop=area.scrollHeight;
+  setTimeout(()=>{
+    logsPausados=false;
+    area.innerHTML+=`<div class="log sys">[SISTEMA] Violação contida.</div>`;
+  },8000);
+}
 
-if (jaEntrouAntes)
-  mensagem-retorno.textContent = "O TERMINAL REGISTROU SUA AUSÊNCIA.";
+setInterval(()=>{
+  if(jogador && Math.random()<0.15)interferencia();
+  else if(jogador && Math.random()<0.05)hacker();
+},12000);
+
+function atualizarFooter(){
+  const f=document.getElementById("footer");
+  f.textContent=`${jogador}… alguém está ajudando vocês.`;
+  f.classList.add("footer-ativo");
+}
 </script>
 </body>
 </html>
