@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>LEMÚRIA | Acesso Monitorado</title>
+<title>LEMÚRIA | Terminal Vivo</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- A LUZ NAO MENTE. ELA OMITE. -->
@@ -53,7 +53,7 @@ button { cursor: pointer; }
 footer {
   text-align: center;
   font-size: 12px;
-  color: #666;
+  color: #7a0000;
   margin: 40px 0 20px;
   min-height: 40px;
   opacity: 0;
@@ -92,9 +92,14 @@ footer {
 <!-- SISTEMA -->
 <main id="sistema" class="hidden">
 
-  <div class="file" onclick="acessar('relatorio')">📄 OP-PRG-0001</div>
-  <div class="file" onclick="acessar('marcas')">📄 OP-PRG-0002</div>
-  <div class="file" onclick="acessar('audio')">🔊 AUDIO_07_CORROMPIDO</div>
+  <div class="file" onclick="acessarFundacao('relatorio')">📄 OP-PRG-0001</div>
+  <div class="file" onclick="acessarFundacao('marcas')">📄 OP-PRG-0002</div>
+  <div class="file" onclick="acessarFundacao('audio')">🔊 AUDIO_07_CORROMPIDO</div>
+
+  <hr>
+
+  <div class="file" onclick="acessarDrakovia()">📄 OP-DRK-███ — Drakóvia</div>
+  <div class="file" onclick="acessarAnotacoes()">✎ Anotações Manuscritas</div>
 
   <hr>
   <div id="logs"></div>
@@ -103,102 +108,112 @@ footer {
 <footer id="footer-text"></footer>
 
 <script>
-/* ===== JOGADORES MARCADOS ===== */
-const marcados = {
-  Belo: { entidade: "Azaroth" },
-  Maju: { entidade: "Luz" },
-  Kate: { entidade: "Azaroth" },
-  Lukas: { entidade: "Luz" },
-  Clay: { entidade: "Azaroth" },
-  Lia: { entidade: "Luz" },
-  Caio: { entidade: "Azaroth" },
-  Karen: { entidade: "Interferencia" }
+/* ===== JOGADORES ===== */
+const jogadores = {
+  Belo: "Azaroth",
+  Kate: "Azaroth",
+  Clay: "Azaroth",
+  Caio: "Azaroth",
+  Maju: "Luz",
+  Lukas: "Luz",
+  Lia: "Luz",
+  Karen: "Interferencia"
 };
+
+const senhaDrakovia = "TENEBRIA-ESPERA";
+const senhaAnotacoes = "A-RELIQUIA-RESPIRA";
 
 let jogador = localStorage.getItem("jogador");
 
 /* ===== LOGIN ===== */
 function login() {
   const nome = document.getElementById("nomeJogador").value.trim();
-  if (!nome) return;
+  if (!jogadores[nome]) {
+    alert("IDENTIDADE NÃO RECONHECIDA.");
+    return;
+  }
   jogador = nome;
   localStorage.setItem("jogador", nome);
-  iniciarSistema();
+  iniciar();
 }
 
-function iniciarSistema() {
+function iniciar() {
   document.getElementById("login").classList.add("hidden");
   document.getElementById("sistema").classList.remove("hidden");
   gerarLogs();
   atualizarFooter();
 }
 
-if (jogador) iniciarSistema();
+if (jogador) iniciar();
 
-/* ===== ACESSO A ARQUIVOS ===== */
-function acessar(tipo) {
+/* ===== ACESSO FUNDAÇÃO ===== */
+function acessarFundacao(tipo) {
   const senha = prompt("Fundação responsável:");
   if (senha !== "H.4.R.D.1") {
-    alert("Acesso negado.");
+    alert("ACESSO NEGADO.");
     return;
   }
+
   if (tipo === "relatorio") window.open("arquivos/OP-PRG-0001.pdf");
   if (tipo === "marcas") window.open("arquivos/OP-PRG-0002_MARCAS_DO_MEDO_CORROMPIDO.pdf");
   if (tipo === "audio") window.open("arquivos/AUDIO_07_CORROMPIDO.wav");
 }
 
-/* ===== LOGS BASE E CRUZADOS ===== */
-const logsBase = {
+/* ===== DRK PDFs ===== */
+function acessarDrakovia() {
+  const s = prompt("Senha do Arquivo:");
+  if (s === senhaDrakovia)
+    window.open("arquivos/OP-DRK-INVESTIGATIVO_DRAKOVIA.pdf");
+  else alert("A TENEBRIA OBSERVA.");
+}
+
+function acessarAnotacoes() {
+  const s = prompt("Senha do Arquivo:");
+  if (s === senhaAnotacoes)
+    window.open("arquivos/OP-DRK-ANOTACOES_MANUSCRITAS_AGENTE.pdf");
+  else alert("VOCÊ NÃO ESTÁ PRONTO.");
+}
+
+/* ===== LOGS ===== */
+const fragmentos = {
   Azaroth: [
-    "Azaroth observa {nome}.",
-    "O caos responde a {nome}.",
-    "{nome} sente o chamado do sangue."
+    "TENEBRIA",
+    "ESPERA",
+    "O CAOS TE CONHECE"
   ],
   Luz: [
-    "A Luz tenta alcançar {nome}.",
-    "{nome} ainda pode escolher.",
-    "{nome} resiste à escuridão."
-  ],
-  Interferencia: [
-    "{nome} não pertence a nenhum lado.",
-    "{nome} ouviu algo proibido.",
-    "{nome} hesitou."
+    "A",
+    "RELIQUIA",
+    "RESPIRA"
   ]
 };
 
 const logsCruzados = [
-  "REGISTRO CRUZADO: {j1} foi mencionado após o acesso de {j2}.",
-  "INTERFERÊNCIA DETECTADA ENTRE {j1} E {j2}.",
+  "REGISTRO CRUZADO: {j1} apareceu após o acesso de {j2}.",
   "{j2} viu o mesmo símbolo que {j1}.",
-  "O nome de {j1} surgiu durante o acesso de {j2}.",
-  "{j1} tentou ignorar. {j2} não conseguiu."
+  "INTERFERÊNCIA ENTRE {j1} E {j2}."
 ];
 
 function gerarLogs() {
   const area = document.getElementById("logs");
   const hoje = new Date().toDateString();
+  const entidade = jogadores[jogador];
 
-  const entidadeAtual = marcados[jogador]?.entidade || "Interferencia";
-  const frasesAtual = logsBase[entidadeAtual];
+  const outros = Object.keys(jogadores).filter(n => n !== jogador);
+  const outro = outros[Math.floor(Math.random() * outros.length)];
 
-  const outros = Object.keys(marcados).filter(n => n !== jogador);
-  const outroJogador = outros[Math.floor(Math.random() * outros.length)];
-  const entidadeOutro = marcados[outroJogador]?.entidade || "Interferencia";
+  let html = `<strong>LOGS — ${hoje}</strong><br><br>`;
 
-  let html = `<strong>LOGS DE ACESSO — ${hoje}</strong><br><br>`;
-
-  for (let i = 0; i < 2; i++) {
-    html += "• " + frasesAtual[Math.floor(Math.random() * frasesAtual.length)]
-      .replace("{nome}", jogador) + "<br>";
-  }
+  fragmentos[entidade]?.forEach(f => {
+    if (Math.random() < 0.5)
+      html += `• ${jogador}, ${f}.<br>`;
+  });
 
   html += `<br><span class="log-cruzado">• ${
-    logsCruzados[Math.floor(Math.random() * logsCruzados.length)]
+    logsCruzados[Math.floor(Math.random()*logsCruzados.length)]
       .replace("{j1}", jogador)
-      .replace("{j2}", outroJogador)
-  }</span><br>`;
-
-  html += `<br>• ${entidadeOutro} foi detectada próxima a ${outroJogador}.<br>`;
+      .replace("{j2}", outro)
+  }</span>`;
 
   area.innerHTML = html;
 }
@@ -206,68 +221,26 @@ function gerarLogs() {
 /* ===== FOOTER VIVO ===== */
 const footer = document.getElementById("footer-text");
 
-const frasesFooter = {
-  Azaroth: [
-    "Você sente isso, {nome}.",
-    "Não lute, {nome}.",
-    "O caos já te conhece."
-  ],
-  Luz: [
-    "{nome}, respire.",
-    "Ainda há escolha.",
-    "Não é tarde."
-  ],
-  Interferencia: [
-    "{nome}… escolha logo.",
-    "Eles mentem.",
-    "Você sabe."
-  ]
-};
-
 function atualizarFooter() {
-  const entidade = marcados[jogador]?.entidade || "Interferencia";
-  let grupo = frasesFooter[entidade];
-
-  if (Math.random() < 0.2) grupo = frasesFooter.Interferencia;
-
-  const frase = grupo[Math.floor(Math.random() * grupo.length)]
-    .replace("{nome}", jogador);
-
-  footer.textContent = frase;
+  footer.textContent = `${jogadores[jogador]} sussurra: ${jogador}…`;
   footer.classList.add("footer-ativo");
 
   if (Math.random() < 0.3) {
     footer.classList.add("footer-glitch");
-    setTimeout(() => footer.classList.remove("footer-glitch"), 300);
+    setTimeout(()=>footer.classList.remove("footer-glitch"),300);
   }
 }
 
-/* ===== ATENÇÃO DO JOGADOR ===== */
-let olhando = true;
-let timeout;
-
+document.addEventListener("mousemove", atualizarFooter);
 document.addEventListener("visibilitychange", () => {
-  olhando = !document.hidden;
-  if (!olhando) footer.classList.remove("footer-ativo");
+  if (document.hidden) footer.classList.remove("footer-ativo");
   else atualizarFooter();
 });
 
-document.addEventListener("mousemove", () => {
-  olhando = true;
-  atualizarFooter();
-  clearTimeout(timeout);
-  timeout = setTimeout(() => {
-    olhando = false;
-    footer.classList.remove("footer-ativo");
-  }, 8000);
-});
-
-setInterval(() => {
-  if (olhando && jogador) atualizarFooter();
-}, 180000);
+setInterval(()=>{ if(!document.hidden) atualizarFooter(); },180000);
 
 console.log("ALGUNS ACESSOS SÃO REGISTRADOS.");
-console.log("LEMÚRIA OBSERVA.");
+console.log("O PORTÃO OBSERVA.");
 </script>
 
 </body>
