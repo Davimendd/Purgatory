@@ -2,228 +2,229 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>LEMÚRIA | Terminal Vivo</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- A LUZ NAO MENTE. ELA OMITE. -->
+<title>TERMINAL ARG — FUNDAÇÃO</title>
 
 <style>
 body {
-  background: radial-gradient(circle at top, #111 0%, #050505 60%, #000 100%);
-  color: #e2e2e2;
-  font-family: "Courier New", monospace;
-  margin: 0;
+  background:#050505;
+  color:#cfcfcf;
+  font-family: monospace;
+  margin:0;
+  padding:0;
 }
 
-.hidden { display: none; }
-
-header {
-  padding: 25px;
-  border-bottom: 1px solid #2a2a2a;
-  text-align: center;
-}
-
-main {
-  padding: 30px;
-  max-width: 900px;
-  margin: auto;
+#login, #terminal {
+  padding:20px;
 }
 
 input, button {
-  background: #000;
-  border: 1px solid #444;
-  color: #e2e2e2;
-  padding: 10px;
-  font-family: inherit;
+  background:black;
+  color:#cfcfcf;
+  border:1px solid #333;
+  padding:8px;
+  margin-top:10px;
 }
 
-button { cursor: pointer; }
-
-.file {
-  border: 1px solid #2a2a2a;
-  padding: 15px;
-  margin-bottom: 15px;
-  cursor: pointer;
+button:hover {
+  background:#111;
+  cursor:pointer;
 }
 
-.file:hover {
-  background: rgba(255,255,255,0.05);
+.log {
+  margin:6px 0;
+  font-size:13px;
 }
 
-footer {
-  text-align: center;
-  font-size: 12px;
-  color: #7a0000;
-  margin: 40px 0 20px;
-  min-height: 40px;
-  opacity: 0;
-  transition: opacity 1.5s ease;
+.log-entidade { color:#7a0000; }
+.log-luz { color:#aaaaff; }
+.log-cruzado { color:#888; font-style:italic; }
+
+#footer {
+  position:fixed;
+  bottom:0;
+  width:100%;
+  background:#000;
+  border-top:1px solid #222;
+  padding:8px;
+  text-align:center;
+  opacity:0.1;
+  transition:opacity 0.3s;
 }
 
-.footer-ativo {
-  opacity: 1;
-  text-shadow: 0 0 8px rgba(180,0,0,0.6);
-}
+.footer-ativo { opacity:1; }
+.footer-glitch { color:#7a0000; }
 
-.footer-glitch {
-  text-shadow: 2px 0 red, -2px 0 cyan;
+a {
+  color:#7a0000;
+  text-decoration:none;
 }
+a:hover { text-decoration:underline; }
 
-.log-cruzado {
-  color: #7a0000;
-}
+.hidden { display:none; }
 </style>
 </head>
-
 <body>
 
-<header>
-  <h1>LEMÚRIA</h1>
-  <p>REPOSITÓRIO RESTRITO — PROJETO PURGATÓRIO</p>
-</header>
-
-<!-- LOGIN -->
-<main id="login">
+<div id="login">
+  <h2>TERMINAL DA FUNDAÇÃO</h2>
   <p>IDENTIFICAÇÃO NECESSÁRIA</p>
+  <p id="mensagem-retorno"></p>
   <input id="nomeJogador" placeholder="Nome do personagem">
+  <br>
   <button onclick="login()">ACESSAR</button>
-</main>
+</div>
 
-<!-- SISTEMA -->
-<main id="sistema" class="hidden">
-
-  <div class="file" onclick="acessarFundacao('relatorio')">📄 OP-PRG-0001</div>
-  <div class="file" onclick="acessarFundacao('marcas')">📄 OP-PRG-0002</div>
-  <div class="file" onclick="acessarFundacao('audio')">🔊 AUDIO_07_CORROMPIDO</div>
-
-  <hr>
-
-  <div class="file" onclick="acessarDrakovia()">📄 OP-DRK-███ — Drakóvia</div>
-  <div class="file" onclick="acessarAnotacoes()">✎ Anotações Manuscritas</div>
-
-  <hr>
+<div id="terminal" class="hidden">
+  <h3>REGISTROS DE ACESSO</h3>
   <div id="logs"></div>
-</main>
 
-<footer id="footer-text"></footer>
+  <h3>ARQUIVOS</h3>
+  <div id="arquivos"></div>
+</div>
+
+<div id="footer"></div>
 
 <script>
-/* ===== JOGADORES ===== */
+/* ===== DADOS ===== */
+
 const jogadores = {
-  Belo: "Azaroth",
-  Kate: "Azaroth",
   Clay: "Azaroth",
-  Caio: "Azaroth",
-  Maju: "Luz",
+  Kate: "Azaroth",
+  Belo: "Azaroth",
   Lukas: "Luz",
+  Maju: "Luz",
   Lia: "Luz",
-  Karen: "Interferencia"
+  Caio: "Azaroth"
 };
 
-const senhaDrakovia = "TENEBRIA-ESPERA";
-const senhaAnotacoes = "A-RELIQUIA-RESPIRA";
+const senhas = {
+  Clay: ["DRK-OBSIDIA", "HIDRA-7"],
+  Kate: ["TENEBRIA", "ECO-MEDO"],
+  Belo: ["NEVOA-VIVA", "OLHO-QUE-LE"],
+  Lukas: ["LUX-PRIME", "CRONO-MORTE"],
+  Maju: ["SELO-LUZ", "PASSADO-FUTURO"],
+  Lia: ["ORDEM", "HARMONIA"],
+  Caio: ["AZAR-ETERNO", "VOZES-DO-MAR"]
+};
 
-let jogador = localStorage.getItem("jogador");
-
-/* ===== LOGIN ===== */
-function login() {
-  const nome = document.getElementById("nomeJogador").value.trim();
-  if (!jogadores[nome]) {
-    alert("IDENTIDADE NÃO RECONHECIDA.");
-    return;
-  }
-  jogador = nome;
-  localStorage.setItem("jogador", nome);
-  iniciar();
-}
-
-function iniciar() {
-  document.getElementById("login").classList.add("hidden");
-  document.getElementById("sistema").classList.remove("hidden");
-  gerarLogs();
-  atualizarFooter();
-}
-
-if (jogador) iniciar();
-
-/* ===== ACESSO FUNDAÇÃO ===== */
-function acessarFundacao(tipo) {
-  const senha = prompt("Fundação responsável:");
-  if (senha !== "H.4.R.D.1") {
-    alert("ACESSO NEGADO.");
-    return;
-  }
-
-  if (tipo === "relatorio") window.open("arquivos/OP-PRG-0001.pdf");
-  if (tipo === "marcas") window.open("arquivos/OP-PRG-0002_MARCAS_DO_MEDO_CORROMPIDO.pdf");
-  if (tipo === "audio") window.open("arquivos/AUDIO_07_CORROMPIDO.wav");
-}
-
-/* ===== DRK PDFs ===== */
-function acessarDrakovia() {
-  const s = prompt("Senha do Arquivo:");
-  if (s === senhaDrakovia)
-    window.open("arquivos/OP-DRK-INVESTIGATIVO_DRAKOVIA.pdf");
-  else alert("A TENEBRIA OBSERVA.");
-}
-
-function acessarAnotacoes() {
-  const s = prompt("Senha do Arquivo:");
-  if (s === senhaAnotacoes)
-    window.open("arquivos/OP-DRK-ANOTACOES_MANUSCRITAS_AGENTE.pdf");
-  else alert("VOCÊ NÃO ESTÁ PRONTO.");
-}
-
-/* ===== LOGS ===== */
-const fragmentos = {
+const frasesEntidades = {
   Azaroth: [
-    "TENEBRIA",
-    "ESPERA",
-    "O CAOS TE CONHECE"
+    "Eu vi você sair.",
+    "A Luz mente.",
+    "Drakóvia observa.",
+    "O medo ensina."
   ],
   Luz: [
-    "A",
-    "RELIQUIA",
-    "RESPIRA"
+    "Não confie no caos.",
+    "Azaroth corrompe.",
+    "O tempo é morte.",
+    "Ainda há escolha."
   ]
 };
 
-const logsCruzados = [
-  "REGISTRO CRUZADO: {j1} apareceu após o acesso de {j2}.",
-  "{j2} viu o mesmo símbolo que {j1}.",
-  "INTERFERÊNCIA ENTRE {j1} E {j2}."
+const frasesAmeaca = [
+  "Você fala com o lado errado.",
+  "Eles já tocaram seu medo.",
+  "O outro lado mente para você."
 ];
 
-function gerarLogs() {
-  const area = document.getElementById("logs");
-  const hoje = new Date().toDateString();
-  const entidade = jogadores[jogador];
+let jogador = sessionStorage.getItem("jogador");
+const jaEntrouAntes = localStorage.getItem("jaEntrouAntes");
 
-  const outros = Object.keys(jogadores).filter(n => n !== jogador);
-  const outro = outros[Math.floor(Math.random() * outros.length)];
+/* ===== LOGIN ===== */
 
-  let html = `<strong>LOGS — ${hoje}</strong><br><br>`;
-
-  fragmentos[entidade]?.forEach(f => {
-    if (Math.random() < 0.5)
-      html += `• ${jogador}, ${f}.<br>`;
-  });
-
-  html += `<br><span class="log-cruzado">• ${
-    logsCruzados[Math.floor(Math.random()*logsCruzados.length)]
-      .replace("{j1}", jogador)
-      .replace("{j2}", outro)
-  }</span>`;
-
-  area.innerHTML = html;
+function login() {
+  const nome = document.getElementById("nomeJogador").value.trim();
+  if (!jogadores[nome]) {
+    alert("IDENTIDADE NÃO RECONHECIDA");
+    return;
+  }
+  jogador = nome;
+  sessionStorage.setItem("jogador", nome);
+  localStorage.setItem("jaEntrouAntes", "true");
+  iniciar();
 }
 
-/* ===== FOOTER VIVO ===== */
-const footer = document.getElementById("footer-text");
+/* ===== INICIAR ===== */
+
+function iniciar() {
+  document.getElementById("login").classList.add("hidden");
+  document.getElementById("terminal").classList.remove("hidden");
+  gerarLogs();
+  gerarArquivos();
+  atualizarFooter();
+}
+
+/* ===== LOGS ===== */
+
+function gerarLogs() {
+  const logs = document.getElementById("logs");
+  logs.innerHTML = "";
+
+  const entidade = jogadores[jogador];
+  const data = new Date().toLocaleDateString();
+
+  logs.innerHTML += `<div class="log">[${data}] Acesso confirmado: ${jogador}</div>`;
+
+  if (jaEntrouAntes) {
+    logs.innerHTML += `<div class="log log-cruzado">
+      ${jogador} retornou após abandonar o terminal.
+    </div>`;
+  }
+
+  logs.innerHTML += `<div class="log log-entidade">
+    ${entidade}: ${frasesEntidades[entidade][Math.floor(Math.random()*4)]}
+  </div>`;
+
+  if (Math.random() < 0.4) {
+    logs.innerHTML += `<div class="log log-entidade">
+      ${frasesAmeaca[Math.floor(Math.random()*3)]}
+    </div>`;
+  }
+
+  logs.innerHTML += `<div class="log log-cruzado">
+    Fragmento observado em outro marcado.
+  </div>`;
+}
+
+/* ===== ARQUIVOS ===== */
+
+function gerarArquivos() {
+  const div = document.getElementById("arquivos");
+  div.innerHTML = `
+  <p>Arquivo OP-DRK-0001 — Drakóvia<br>
+  <input placeholder="Senha" oninput="verificarSenha(this, 0)">
+  </p>
+
+  <p>Arquivo OP-DRK-ANOTAÇÕES<br>
+  <input placeholder="Senha" oninput="verificarSenha(this, 1)">
+  </p>
+  `;
+}
+
+function verificarSenha(input, index) {
+  if (input.value === senhas[jogador][index]) {
+    input.outerHTML = `
+      <a href="${index===0 ? 'OP-DRK-INVESTIGATIVO_DRAKOVIA.pdf' :
+      'OP-DRK-ANOTACOES_MANUSCRITAS_AGENTE.pdf'}" target="_blank">
+      ACESSAR ARQUIVO
+      </a>`;
+  }
+}
+
+/* ===== FOOTER ===== */
+
+const footer = document.getElementById("footer");
+
+document.addEventListener("mousemove", () => {
+  footer.classList.add("footer-ativo");
+  atualizarFooter();
+  setTimeout(()=>footer.classList.remove("footer-ativo"),800);
+});
 
 function atualizarFooter() {
-  footer.textContent = `${jogadores[jogador]} sussurra: ${jogador}…`;
-  footer.classList.add("footer-ativo");
+  const entidade = jogadores[jogador];
+  footer.textContent = `${entidade} chama por ${jogador}…`;
 
   if (Math.random() < 0.3) {
     footer.classList.add("footer-glitch");
@@ -231,17 +232,18 @@ function atualizarFooter() {
   }
 }
 
-document.addEventListener("mousemove", atualizarFooter);
-document.addEventListener("visibilitychange", () => {
-  if (document.hidden) footer.classList.remove("footer-ativo");
-  else atualizarFooter();
+/* ===== LIMPAR SESSÃO ===== */
+
+window.addEventListener("beforeunload", () => {
+  sessionStorage.clear();
 });
 
-setInterval(()=>{ if(!document.hidden) atualizarFooter(); },180000);
+/* ===== AUTO ===== */
 
-console.log("ALGUNS ACESSOS SÃO REGISTRADOS.");
-console.log("O PORTÃO OBSERVA.");
+if (jaEntrouAntes) {
+  document.getElementById("mensagem-retorno").innerText =
+    "O TERMINAL RECONHECE SUA AUSÊNCIA.";
+}
 </script>
-
 </body>
 </html>
