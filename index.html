@@ -1,245 +1,70 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>LEMÚRIA — TERMINAL</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-body{
-  background:#020402;
-  color:#7CFF7C;
-  font-family:"Courier New", monospace;
-  margin:0;
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  text-shadow:0 0 6px rgba(124,255,124,.4);
-}
-
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  background:repeating-linear-gradient(
-    to bottom,
-    rgba(0,0,0,.15),
-    rgba(0,0,0,.15) 1px,
-    transparent 1px,
-    transparent 3px
-  );
-  pointer-events:none;
-}
-
-#terminal{
-  width:1000px;
-  max-width:95%;
-  height:600px;
-  background:#000;
-  border:2px solid #1e5f1e;
-  display:grid;
-  grid-template-columns: 2fr 1fr;
-}
-
-.hidden{display:none;}
-
-#main{padding:20px;}
-#logs{
-  border-left:1px solid #1e5f1e;
-  padding:15px;
-  font-size:12px;
-  overflow-y:auto;
-  background:#010301;
-}
-
-.log{margin-bottom:10px;opacity:.9;}
-.log.az{color:#ff6a6a;}
-.log.lz{color:#6acbff;}
-.log.sys{color:#7CFF7C;}
-.log.hk{
-  color:#e6ff00;
-  text-shadow:0 0 8px rgba(255,255,0,.6);
-}
-
-h1{text-align:center;letter-spacing:4px;}
-.sub{text-align:center;font-size:11px;color:#6fae6f;margin-bottom:20px;}
-
-input,button{
-  background:#000;
-  border:1px solid #3aff3a;
-  color:#7CFF7C;
-  padding:8px;
-  font-family:inherit;
-}
-
-button{cursor:pointer;}
-button:hover{background:#062206;}
-
-.opcao{
-  border:1px solid #1e5f1e;
-  padding:10px;
-  margin-bottom:8px;
-  cursor:pointer;
-}
-.opcao:hover{background:rgba(124,255,124,.08);}
-.bloqueado{color:#777;border-color:#333;}
-.bloqueado::after{content:" [SELADO]";color:#7a0000;}
-
-#footer{
-  margin-top:20px;
-  font-size:12px;
-  opacity:0;
-  transition:opacity 1s;
-}
-.footer-ativo{
-  opacity:1;
-  text-shadow:0 0 10px rgba(255,0,0,.6);
-}
-</style>
+  <meta charset="UTF-8">
+  <title>LEMÚRIA — TERMINAL</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+
+<!-- TERMINAL -->
 <div id="terminal">
 
-<div id="main">
+  <div id="main">
 
-<div id="login">
-<h1>LEMÚRIA</h1>
-<div class="sub">TERMINAL RESTRITO — PROJETO PURGATÓRIO</div>
-<p>IDENTIFICAÇÃO:</p>
-<input id="nome">
-<button onclick="login()">CONFIRMAR</button>
-<p id="erro" style="color:#ff6a6a;font-size:12px;"></p>
+    <!-- LOGIN -->
+    <div id="loginTela">
+      <h1>LEMÚRIA</h1>
+      <div class="sub">TERMINAL RESTRITO — PROJETO PURGATÓRIO</div>
+
+      <p>IDENTIFICAÇÃO:</p>
+      <input id="nome" autocomplete="off">
+      <button onclick="login()">CONFIRMAR</button>
+
+      <p id="erro" class="erro"></p>
+    </div>
+
+    <!-- SISTEMA -->
+    <div id="sistema" class="hidden">
+      <h1>LEMÚRIA</h1>
+      <div class="sub">ACESSO CONCEDIDO</div>
+
+      <div class="folder" onclick="toggle('docs')">📁 DOCUMENTOS</div>
+      <div id="docs" class="files hidden">
+        <div class="file doc" data-arq="OP-PRG-0001.pdf">📄 OP-PRG-0001</div>
+        <div class="file doc" data-arq="OP-PRG-0002_MARCAS_DO_MEDO_CORROMPIDO.pdf">📄 OP-PRG-0002</div>
+        <div class="file doc" data-arq="OP-DRK-INVESTIGATIVO_DRAKOVIA.pdf">📄 Investigativo Drakóvia</div>
+        <div class="file doc" data-arq="OP-DRK-ANOTACOES_MANUSCRITAS_AGENTE.pdf">📄 Anotações Manuscritas</div>
+        <div class="file bloqueado" onclick="acessarFundacao()">🔒 Fundação H.4.R.D.1</div>
+
+      </div>
+
+      <div class="folder" onclick="toggle('exp')">🧪 EXPERIMENTOS</div>
+      <div id="exp" class="files hidden">
+        <div class="file doc" data-arq="AUDIO_07_CORROMPIDO.wav">🔊 AUDIO_07_CORROMPIDO</div>
+        <div class="file" onclick="clicarFitaVHS()">📼 Fita VHS</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- LOGS -->
+  <div id="logs"></div>
+
 </div>
 
-<div id="sistema" class="hidden">
-<h1>LEMÚRIA</h1>
-<div class="sub">ACESSO CONCEDIDO</div>
-
-<div class="opcao" onclick="abrir('audio')">🔊 AUDIO_07_CORROMPIDO</div>
-<div class="opcao" onclick="abrir('op1')">📄 OP-PRG-0001</div>
-<div class="opcao" onclick="abrir('op2')">📄 OP-PRG-0002</div>
-
-<div class="opcao bloqueado" onclick="senha('drk')">🔒 Investigativo Drakóvia</div>
-<div class="opcao bloqueado" onclick="senha('ano')">🔒 Anotações Manuscritas</div>
-
-<div id="footer"></div>
-</div>
+<!-- RITUAL (OVERLAY) -->
+<div id="ritualTelopsia" class="hidden">
+  <div id="simboloEnergia">🝪</div>
 </div>
 
-<div id="logs"></div>
-</div>
 
-<script>
-const jogadores={
-  Clay:"Azaroth",Kate:"Azaroth",Belo:"Azaroth",Caio:"Azaroth",
-  Maju:"Luz",Lia:"Luz",Lukas:"Luz"
-};
+<audio id="musicaVHS" preload="auto">
+  <source src="arquivos/take_a_slice.mp3" type="audio/mpeg">
+</audio>
 
-const pistas={
-  Clay:["TENEBRIA não é pedra.","O medo molda a memória."],
-  Kate:["VERDADE não se escreve inteira.","Drakóvia observa."],
-  Belo:["O nome vem do minério.","Não é plural."],
-  Maju:["VOZES não falam sozinhas.","Escute a névoa."],
-  Lia:["A NEVOA conduz.","Nada ecoa."],
-  Lukas:["NA separa.","O hífen importa."],
-  Caio:["A senha confirma.","Não abre portas."]
-};
 
-const falasEntidades={
-  Azaroth:["Eles mentem.","Aceite o caos.","A Luz falha."],
-  Luz:["Resista.","Ainda há tempo.","Não confie nele."]
-};
-
-const falasHacker=[
-  "vocês estão juntando errado",
-  "não é uma frase, é uma junção",
-  "TENEBRIA + VERDADE",
-  "VOZES atravessam a NEVOA",
-  "o hífen NÃO é decorativo",
-  "cada um viu um pedaço",
-  "a fundação não quer que vocês saibam"
-];
-
-let jogador=null;
-let logsPausados=false;
-
-function login(){
-  const nome=document.getElementById("nome").value.trim();
-  if(!jogadores[nome]){
-    document.getElementById("erro").textContent="IDENTIDADE NÃO RECONHECIDA.";
-    return;
-  }
-  jogador=nome;
-  document.getElementById("login").classList.add("hidden");
-  document.getElementById("sistema").classList.remove("hidden");
-  iniciarLogs();
-  atualizarFooter();
-}
-
-function abrir(t){
-  if(t==="audio")window.open("arquivos/AUDIO_07_CORROMPIDO.wav");
-  if(t==="op1")window.open("arquivos/OP-PRG-0001.pdf");
-  if(t==="op2")window.open("arquivos/OP-PRG-0002_MARCAS_DO_MEDO_CORROMPIDO.pdf");
-}
-
-function senha(t){
-  const s=prompt("INSIRA A SENHA:");
-  if(t==="drk" && s==="TENEBRIA-VERDADE")
-    window.open("arquivos/OP-DRK-INVESTIGATIVO_DRAKOVIA.pdf");
-  else if(t==="ano" && s==="VOZES-NA-NEVOA")
-    window.open("arquivos/OP-DRK-ANOTACOES_MANUSCRITAS_AGENTE.pdf");
-  else alert("SENHA INCORRETA.");
-}
-
-function iniciarLogs(){
-  const area=document.getElementById("logs");
-  area.innerHTML="<strong>LOGS ATIVOS</strong><br><br>";
-  let i=0;
-
-  setInterval(()=>{
-    if(logsPausados||!jogador)return;
-    const msg=pistas[jogador][i%pistas[jogador].length];
-    const classe=jogadores[jogador]==="Azaroth"?"az":"lz";
-    area.innerHTML+=`<div class="log ${classe}">[${new Date().toLocaleTimeString()}] ${msg}</div>`;
-    area.scrollTop=area.scrollHeight;
-    i++;
-  },4000);
-}
-
-function interferencia(){
-  if(logsPausados)return;
-  logsPausados=true;
-  const entidade=Math.random()<0.5?"Azaroth":"Luz";
-  const area=document.getElementById("logs");
-  area.innerHTML+=`<div class="log ${entidade==="Azaroth"?"az":"lz"}"><strong>[INTERFERÊNCIA]</strong> ${falasEntidades[entidade][Math.floor(Math.random()*3)]}</div>`;
-  area.scrollTop=area.scrollHeight;
-  setTimeout(()=>logsPausados=false,6000);
-}
-
-function hacker(){
-  if(logsPausados)return;
-  logsPausados=true;
-  const area=document.getElementById("logs");
-  area.innerHTML+=`<div class="log hk"><strong>[INTRUSÃO EXTERNA]</strong> ${falasHacker[Math.floor(Math.random()*falasHacker.length)]}</div>`;
-  area.scrollTop=area.scrollHeight;
-  setTimeout(()=>{
-    logsPausados=false;
-    area.innerHTML+=`<div class="log sys">[SISTEMA] Violação contida.</div>`;
-  },8000);
-}
-
-setInterval(()=>{
-  if(jogador && Math.random()<0.15)interferencia();
-  else if(jogador && Math.random()<0.05)hacker();
-},12000);
-
-function atualizarFooter(){
-  const f=document.getElementById("footer");
-  f.textContent=`${jogador}… alguém está ajudando vocês.`;
-  f.classList.add("footer-ativo");
-}
-</script>
+<script src="script.js"></script>
 </body>
 </html>

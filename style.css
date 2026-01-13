@@ -1,0 +1,164 @@
+body{
+  background:#010102;
+  color:#7CFF7C;
+  font-family:"Courier New", monospace;
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+}
+
+.hidden{display:none;}
+
+#terminal{
+  width:1120px;
+  height:650px;
+  background:#000;
+  border:2px solid #1e5f1e;
+  display:grid;
+  grid-template-columns:3fr 1fr;
+}
+
+#main{padding:20px;}
+#logs{
+  border-left:1px solid #1e5f1e;
+  padding:12px;
+  font-size:12px;
+  overflow:hidden;
+}
+
+.folder,.file{
+  border:1px solid #1e5f1e;
+  padding:10px;
+  margin-bottom:6px;
+  cursor:pointer;
+}
+
+.files{margin-left:20px;}
+
+.log.tel{
+  color:#c77dff;
+  text-shadow:0 0 8px rgba(180,80,255,.8);
+}
+
+/* RITUAL */
+#ritualTelopsia {
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.85);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+
+#ritualTelopsia.hidden {
+  display:none;
+}
+
+#simboloEnergia {
+  font-size:65vh;
+  color:#b56bff;
+  text-shadow:
+    0 0 40px #b56bff,
+    0 0 90px #ff4dff,
+    0 0 160px #7a00ff;
+  animation: simboloPisca 0.18s infinite alternate;
+}
+
+@keyframes simboloPisca {
+  0% {
+    opacity:0.3;
+    transform:scale(0.9);
+    filter:hue-rotate(0deg);
+  }
+  100% {
+    opacity:1;
+    transform:scale(1.05);
+    filter:hue-rotate(180deg);
+  }
+}
+
+
+#ritualTelopsia.ativo{
+  display:flex;
+}
+
+
+#simboloEnergia{
+  font-size:45vw;
+  color:#b56bff;
+  text-shadow:
+    0 0 30px #b56bff,
+    0 0 80px #a855ff,
+    0 0 160px #ff7bff;
+  animation:pulsar 1.2s infinite alternate;
+}
+
+@keyframes pulsar{
+  from{opacity:.4; transform:scale(.95);}
+  to{opacity:1; transform:scale(1.05);}
+}
+
+/* ====== CORRUPÇÃO VISUAL TOTAL ====== */
+body.vhs-corrompido {
+  animation: vhsPulse 0.35s infinite alternate;
+}
+
+@keyframes vhsPulse {
+  0% {
+    filter:
+      hue-rotate(0deg)
+      brightness(1.2)
+      contrast(1.4);
+  }
+  25% {
+    filter:
+      hue-rotate(90deg)
+      brightness(1.4)
+      contrast(1.6);
+  }
+  50% {
+    filter:
+      hue-rotate(180deg)
+      brightness(1.1)
+      contrast(1.8);
+  }
+  75% {
+    filter:
+      hue-rotate(270deg)
+      brightness(1.3)
+      contrast(1.5);
+  }
+  100% {
+    filter:
+      hue-rotate(360deg)
+      brightness(1.6)
+      contrast(2);
+  }
+}
+
+/* Terminal piscando individualmente */
+body.vhs-corrompido #terminal {
+  animation: terminalShake 0.12s infinite alternate;
+}
+
+@keyframes terminalShake {
+  from { transform: translate(0,0) skew(0deg); }
+  to   { transform: translate(1px,-1px) skew(0.6deg); }
+}
+
+/* Logs mais agressivos */
+body.vhs-corrompido .log {
+  animation: logFlash 0.2s infinite alternate;
+}
+
+@keyframes logFlash {
+  0% { color:#7CFF7C; }
+  25% { color:#b56bff; } /* roxo */
+  50% { color:#ff4d4d; } /* vermelho */
+  75% { color:#4da6ff; } /* azul */
+  100% { color:#4dff4d; } /* verde */
+}
